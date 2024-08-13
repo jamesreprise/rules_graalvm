@@ -212,12 +212,19 @@ def assemble_native_build_options(
     if not ctx.attr.check_toolchains:
         args.add("-H:-CheckToolchain")
 
-    # assemble classpath
-    args.add_joined(
-        "-cp",
-        classpath_depset,
-        join_with = path_list_separator,
-    )
+    if ctx.attr.jarfile:
+        args.add("-jar")
+        args.add(ctx.file.jarfile)
+        direct_inputs.append(ctx.file.jarfile)
+    else:
+        # assemble classpath
+        args.add_joined(
+            "-cp",
+            classpath_depset,
+            join_with = path_list_separator,
+        )
+
+    args.add(binary.basename.replace(".exe", ""), format = "-H:Name=%s")
 
     args.add_joined(
         ctx.attr.native_features,

@@ -40,6 +40,10 @@ def _graal_binary_implementation(ctx):
     graal_attr = ctx.attr.native_image_tool
     extra_tool_deps = []
     gvm_toolchain = None
+    if ctx.attr.jarfile == None and ctx.attr.deps == None:
+      fail("""
+          Native Image build failure: Must supply either `deps` or `jarfile`.
+      """)
     classpath_depset = depset(transitive = [
         dep[JavaInfo].transitive_runtime_jars
         for dep in ctx.attr.deps

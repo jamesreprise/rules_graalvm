@@ -41,7 +41,12 @@ _OPTIMIZATION_MODE_CONDITION = select({
 _NATIVE_IMAGE_ATTRS = {
     "deps": attr.label_list(
         providers = [[JavaInfo]],
-        mandatory = True,
+        mandatory = False,
+    ),
+    "jarfile": attr.label(
+        allow_single_file = True,
+        mandatory = False,
+        providers = [[JavaInfo]],
     ),
     "main_class": attr.string(
         mandatory = False,
