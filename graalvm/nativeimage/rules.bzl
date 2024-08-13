@@ -62,7 +62,8 @@ _native_image = rule(
 # Exports.
 def native_image(
         name,
-        deps,
+        deps = None,
+        jarfile = None,
         main_class = None,
         executable_name = _EXEUCTABLE_NAME_CONDITION,
         include_resources = None,
@@ -87,7 +88,8 @@ def native_image(
 
     Args:
         name: Name of the target; required.
-        deps: Dependency `java_library` targets to assemble the classpath from. Mandatory.
+        deps: Dependency `java_library` targets to assemble the classpath from. Mandatory unless jar is supplied.
+        jarfile: Jarfile to build an image from. Mandatory unless deps are supplied.
         main_class: Entrypoint main class to build from; mandatory unless building a shared library.
         executable_name: Set the name of the output binary; defaults to `%target%-bin`, or `%target%-bin.exe` on Windows.
             The special string `%target%`, if present, is replaced with `name`.
@@ -119,6 +121,7 @@ def native_image(
     _native_image(
         name = name,
         deps = deps,
+        jarfile = jarfile,
         main_class = main_class,
         include_resources = include_resources,
         reflection_configuration = reflection_configuration,
